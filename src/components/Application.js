@@ -5,6 +5,7 @@ import Appointment from "components/Appointment";
 import axios from "axios";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 import useVisualMode from "../hooks/useVisualMode";
+import { debug } from "debug";
 
 
 
@@ -46,13 +47,13 @@ export default function Application(props) {
       ...state.appointments,
       [id]: appointment
     };
-    setState({...state, appointments})
-
+    
     return (
-      axios.put(`http://localhost:8001/api/appointments/${id}`, appointment )
-          .then(res => {
-            setState({...appointments})
-          })
+      axios.put(`http://localhost:8001/api/appointments/${id}`, {interview})
+      .then(res => {
+        setState((prevState) => {
+          return {...prevState, appointments}})
+      })
     )
   }
 // Why do we have this function in this component and not the Form component?

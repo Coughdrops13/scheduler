@@ -5,7 +5,6 @@ import Show from "./Show";
 import Empty from "./Empty";
 import Form from "./Form";  
 import useVisualMode from "../../hooks/useVisualMode";
-import { action } from "@storybook/addon-actions";
 
 
 export default function Appointment(props) {
