@@ -11,7 +11,7 @@ import useVisualMode from "../../hooks/useVisualMode";
 
 
 export default function Appointment(props) {
-  // console.log('APPOINTMENT PROPS:', props);
+  console.log('APPOINTMENT PROPS:', props);
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
@@ -31,7 +31,7 @@ export default function Appointment(props) {
     };
     transition(SAVING);
     props
-      .bookInterview(props.id, interview)
+      .bookInterview(props.id, interview, props.edit)
       .then((res) => transition(SHOW))
       .catch(err => transition(ERROR_SAVE, true))
   }

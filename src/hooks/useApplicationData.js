@@ -9,6 +9,8 @@ export default function useApplicationData() {
     appointments: {},
     interviewers: {}
   });
+
+  
   
   const setDay = day => setState({ ...state, day });
   
@@ -26,7 +28,20 @@ export default function useApplicationData() {
       })
   }, []);
   
-  
+
+  // find number of unbooked interviews for a given day
+  function updateSpots(book) {
+    let spotsRemaining = 0;
+
+    for (const day of state.days) {
+      if (day.name === state.day) {
+        spotsRemaining = book ? day.spots-- : day.spots++;
+      }
+    }
+    return spotsRemaining;
+  }
+
+
   // function called when save is clicked in Form component
   function bookInterview(id, interview) {
     // creates an appointment object with the given interview object from Form input
@@ -39,18 +54,17 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
-    
+
     // api call to db to input new interview object, returns a 
     // promise that we .then in save function in Appointment component
     return (
       axios.put(`http://localhost:8001/api/appointments/${id}`, {interview})
         .then(res => {
           setState((prevState) => {
-            return {...prevState, appointments}
+          return {...prevState, appointments, spots: updateSpots(true, false)}
           })
-      })
-    )
-  }
+        })
+    )}
   
   function cancelInterview(id) {
     const appointment = {
@@ -61,14 +75,16 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     }
+
+
     return (
       axios.delete(`http://localhost:8001/api/appointments/${id}`)
       .then(res => {
         setState((prevState) => {
-          return {...prevState, appointments}
+          return {...prevState, appointments, spots: updateSpots(false, false)}
         })
       })
-    )
-  }
+    )}
+
   return {state, setDay, bookInterview, cancelInterview };
 }
