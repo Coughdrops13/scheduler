@@ -1,6 +1,9 @@
 import React from 'react';
 import DayListItem from './DayListItem';
 
+// The list of days on the left or top of the screen
+// called by Application.js
+
 export default function DayList(props) {
   return (
     <ul>

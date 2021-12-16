@@ -1,5 +1,7 @@
 import React from "react";
 
+// component that displays a booked interview
+
 export default function Show(props) {
   return (
     <main className="appointment__card appointment__card--show">

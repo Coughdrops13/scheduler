@@ -1,5 +1,7 @@
 import React from "react";
 
+// error message when something malfunctions when creating interview appointments
+
 export default function Error(props) {
   return (
     <main className="appointment__card appointment__card--error">

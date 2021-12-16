@@ -3,6 +3,7 @@ import InterviewerListItem from "components/InterviewerListItem";
 import "components/InterviewerList.scss";
 import PropTypes from 'prop-types';
 
+// list of interviewers that appears at the bottom of a book or edit interview form
 
 export default function InterviewerList(props) {
   return (

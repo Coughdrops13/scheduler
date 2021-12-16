@@ -8,6 +8,8 @@ import useApplicationData from "../hooks/useApplicationData";
 
 
 export default function Application(props) {
+  
+  // custom hook that passes state to children of App
   const {
     state,
     setDay,
@@ -17,10 +19,13 @@ export default function Application(props) {
  
 
 
-
+// helper functions that collect data for each day depending on state 
+// so that correct props can be passed to children
   const interviewers = getInterviewersForDay(state, state.day);
   const appointments = getAppointmentsForDay(state, state.day);
 
+  // maps over days object to create an appointment component for each day
+  // with correct props
   const schedule = appointments.map(appointment => {
     const interview = getInterview(state, appointment.interview);
     return (
@@ -61,7 +66,9 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         <>
+        {/* the Appointment components containing each appointment for a a day */}
           {schedule}
+          {/* The last appointment has a different key for styling purposes */}
           <Appointment key="last" time="5pm" />
         </>
       </section>

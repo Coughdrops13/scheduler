@@ -2,6 +2,10 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
 
+// custom hook that sets state and day, makes calls to api
+// and contains functions for updating the number of available spots
+//  and cancelling and booking interviews
+
 export default function useApplicationData() {
   const [state, setState] = useState({
     day: "Monday",
@@ -14,7 +18,8 @@ export default function useApplicationData() {
   
   const setDay = day => setState({ ...state, day });
   
-   // Get all info from API about state
+   // Get all info from API about state and set state by overwriting
+
   useEffect(() => {
     Promise.all([
       axios.get('/api/days'),
@@ -30,8 +35,11 @@ export default function useApplicationData() {
   
 
   // find number of unbooked interviews for a given day
+  // book is a boolean that indicates if a spot should be added 
+  // or subtracted
   function updateSpots(id, book) {
     if (book) {
+      // if interview is null, then it is an open spot
       if (state.appointments[id].interview === null) {
         state.days.forEach(day => {
           if (day.name === state.day) {
@@ -63,7 +71,8 @@ export default function useApplicationData() {
     };
 
     // api call to db to input new interview object, returns a 
-    // promise that we .then in save function in Appointment component
+    // promise that we .then update spots and overwrite state to reflect
+    // the correct amount of open spots
     return (
       axios.put(`/api/appointments/${id}`, {interview})
         .then(res => {
@@ -74,7 +83,11 @@ export default function useApplicationData() {
         })
     )}
   
+
+  // the reverse of the bookInterview function
   function cancelInterview(id) {
+
+    // sets interview state to null
     const appointment = {
       ...state.appointments[id],
       interview: null

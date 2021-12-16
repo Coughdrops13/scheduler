@@ -9,9 +9,12 @@ import Confirm from "./Confirm";
 import Error from "./Error";
 import useVisualMode from "../../hooks/useVisualMode";
 
+// component that keeps track of appointment mode and transitions to proper components
+
 
 export default function Appointment(props) {
-  console.log('APPOINTMENT PROPS:', props);
+
+  // list of mode variables that then have components associated with them
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
@@ -24,6 +27,8 @@ export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
+
+  // function that executes bookInterview function after transitioning to proper modes
   function save(name, interviewer) {
     const interview = {
       student: name,
@@ -36,6 +41,7 @@ export default function Appointment(props) {
       .catch(err => transition(ERROR_SAVE, true))
   }
 
+  // same as save but transitions to Empty component instead of Show component
   function deleteAppointment() {
     transition(DELETING, true);
     props
@@ -46,6 +52,7 @@ export default function Appointment(props) {
 
   return(
     <article className="appointment">
+      {/* every appointment shows time no matter the mode */}
         <Header time={props.time}/>
         {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
         {mode === SHOW && (

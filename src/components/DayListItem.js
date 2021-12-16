@@ -2,14 +2,17 @@ import React from "react";
 import 'components/DayListItem.scss';
 import classNames from 'classnames';
 
+// Each day that appears in the list of days on the left or top of the screen
+// called by DayList
+
 export default function DayListItem(props) {
-  console.log('DAYLIST ITEM PROPS:', props); 
 
   let dayClass = classNames('day-list__item', {
     'day-list__item--selected': props.selected,
     'day-list__item--full': props.spots === 0,
   });
 
+  // function that creates proper message to appear depending on number of spots available
   const formatSpots = spots => {
     if (spots === 1) {
       return '1 spot remaining';
