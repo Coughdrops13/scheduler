@@ -63,6 +63,8 @@ export default function Appointment(props) {
             onEdit={() => transition(EDIT)}
           />
         )}
+
+        {/* each mode is associated with a component and each component is passed all the props it needs */}
         {mode === CREATE && <Form interviewers={props.interviewers} onSave={save} onCancel={() => back()}/>}
         {mode === SAVING && <Status message={"Saving..."}/>}
         {mode === CONFIRM && <Confirm onCancel={() => back()} onConfirm={deleteAppointment} message={"Are you sure?"}/>}
