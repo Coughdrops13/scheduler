@@ -17,9 +17,9 @@ export default function useApplicationData() {
    // Get all info from API about state
   useEffect(() => {
     Promise.all([
-      axios.get('http://localhost:8001/api/days'),
-      axios.get('http://localhost:8001/api/appointments'),
-      axios.get('http://localhost:8001/api/interviewers')
+      axios.get('/api/days'),
+      axios.get('/api/appointments'),
+      axios.get('/api/interviewers')
   
     ])
       .then((all) => {
@@ -30,15 +30,22 @@ export default function useApplicationData() {
   
 
   // find number of unbooked interviews for a given day
-  function updateSpots(book) {
-    let spotsRemaining = 0;
-
-    for (const day of state.days) {
-      if (day.name === state.day) {
-        spotsRemaining = book ? day.spots-- : day.spots++;
+  function updateSpots(id, book) {
+    if (book) {
+      if (state.appointments[id].interview === null) {
+        state.days.forEach(day => {
+          if (day.name === state.day) {
+            day.spots--
+          }
+        })
       }
+    } else {
+      state.days.forEach(day => {
+        if (day.name === state.day) {
+          day.spots++
+        }
+      })
     }
-    return spotsRemaining;
   }
 
 
@@ -58,10 +65,11 @@ export default function useApplicationData() {
     // api call to db to input new interview object, returns a 
     // promise that we .then in save function in Appointment component
     return (
-      axios.put(`http://localhost:8001/api/appointments/${id}`, {interview})
+      axios.put(`/api/appointments/${id}`, {interview})
         .then(res => {
+          updateSpots(id, true);
           setState((prevState) => {
-          return {...prevState, appointments, spots: updateSpots(true, false)}
+          return {...prevState, appointments, days: state.days}
           })
         })
     )}
@@ -78,10 +86,11 @@ export default function useApplicationData() {
 
 
     return (
-      axios.delete(`http://localhost:8001/api/appointments/${id}`)
+      axios.delete(`/api/appointments/${id}`)
       .then(res => {
+        updateSpots(id, false)
         setState((prevState) => {
-          return {...prevState, appointments, spots: updateSpots(false, false)}
+          return {...prevState, appointments, days: state.days}
         })
       })
     )}
